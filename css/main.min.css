@@ -140,7 +140,7 @@ body
             position:absolute;
             left:50%;
             top:30px;
-            bottom:0px; /*底部高度*/
+            bottom:30px; /*底部高度*/
             overflow:hidden;
             /* height: 800px; */
             width:360px;
