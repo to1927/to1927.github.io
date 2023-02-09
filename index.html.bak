@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=100%, initial-scale=1">
+        <title>与1728聊天中</title>
+        <link href="css/main.min.css" rel="stylesheet" type="text/css">
+        <link rel="Shortcut Icon" href="favicon.ico"/>
+        <!-- <link rel="preload" href="img/love-the-girl.jpg" as="image">
+        <link rel="preload" href="img/news-wuhanfeiyan.jpg" as="image">
+        <link rel="preload" href="img/separate.jpeg" as="image">
+        <link rel="preload" href="img/in-sichuan.jpeg" as="image">
+        <link rel="preload" href="img/lucky-me.jpg" as="image">
+        <link rel="preload" href="img/breakfast.jpg" as="image">
+        <link rel="preload" href="img/exercise-together.jpg" as="image">
+        <link rel="preload" href="img/travel.jpg" as="image">
+        <link rel="preload" href="img/foot.jpg" as="image">
+        <link rel="preload" href="img/marry-me.png" as="image">
+        <link rel="preload" href="img/kiss-my-princess.png" as="image"> -->
+        <link rel="preload" href="img/1.jpg" as="image">
+        <link rel="preload" href="img/2.jpg" as="image">
+        <link rel="preload" href="img/3.jpg" as="image">
+        <link rel="preload" href="img/4.jpg" as="image">
+        <link rel="preload" href="img/5.jpg" as="image">
+    </head>
+    <body>
+        <div id="ttt" class="animated shake">1728请求与你聊天</div>
+        <div id="button1" onclick="asd()">查看</div>
+        <div id="mobile" :class="{ 'has-prompt': hasPrompt }">
+            <div id="mobile-head">
+                <div id="mobile-head-title">与1728聊天中</div>
+            </div>
+            <div id="mobile-body">
+                <div id="mobile-body-bg"></div>
+                <div id="mobile-body-content">
+                    <div id="mock-msg-row" class="msg-row">
+                        <div id="mock-msg" class="msg" v-html="latestMsgContent"></div>
+                    </div>
+                    <div class="msg-row"
+                        v-for="(msg, index) in messages"
+                        :key="index"
+                        :class="msg.author === 'author' ? 'msg-author' : 'msg-me'">
+                        <div class="msg"
+                            :class="'msg-bounce-in-' + (msg.author === 'author' ? 'left': 'right')"
+                            :style="msg.width && msg.height && {width: msg.width - 26 + 'px', height: msg.height - 18 + 'px'}"
+                            v-html="msg.content"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="mobile-foot">
+                <div id="prompt">
+                    <div id="prompt-head">
+                        <div class="say-something">我想说……</div>
+                        <a href="javascript:;" class="close-btn"
+                            v-on:click="togglePrompt(false)"></a>
+                    </div>
+                    <div id="prompt-body">
+                        <ul class="responses" v-if="lastDialog">
+                            <li v-for="res in lastDialog.responses">
+                                <a href="javascript:;" v-on:click="respond(res)">{{ res.content }}</a>
+                            </li>
+                        </ul>
+                        <div class="next-topic"
+                            v-if="!lastDialog || !lastDialog.responses">
+                            <ul class="topics">
+                                <li v-for="topic in nextTopics">
+                                    <a href="javascript:;" v-on:click="ask(topic)">{{ topic.brief }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="input-hint" class="say-something"
+                    v-on:click="togglePrompt(true)"
+                    :class="{'clickable': !isTyping }">
+                    <span v-if="!isTyping">我想说……</span>
+                    <span v-if="isTyping">1728正在输入中</span>
+                </div>
+            </div>
+            <div id="prompt-bg" v-on:click="togglePrompt(false)"></div>
+            
+        </div>
+
+        <div style="position:absolute;bottom:0;width:100%;margin:0 auto; padding-bottom: 10px;text-align: center;">
+            <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=35012102500454" 
+            style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+            <img src="img/备案图标.png" style="float:left;"/>
+            <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">闽公网安备 35012102500454号</p></a>
+            <a target="_blank" href="https://beian.miit.gov.cn/" 
+            style="display:inline-block;text-decoration:none;height:20px;line-height:20px;">
+            <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:#939393;">闽ICP备2022003760号-1</p></a>
+        </div>
+        
+
+        <script src="//cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+        <script src="//cdn.bootcss.com/vue/2.2.6/vue.min.js"></script>
+
+        <!-- <script src="js/index-min.js"></script> -->
+        <script>
+            function asd() {
+              document.getElementById("button1").style.display = "none";
+              document.getElementById("mobile").style.display = "block";
+              "use strict";var _typeof="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t};function _toConsumableArray(t){if(Array.isArray(t)){for(var n=0,e=Array(t.length);n<t.length;n++)e[n]=t[n];return e}return Array.from(t)}!function(){var t="author",n="me";new Vue({el:"#mobile",data:{messages:[],dialogs:null,lastDialog:null,msgChain:Promise.resolve(),isTyping:!1,nextTopics:[],hasPrompt:!1,latestMsgContent:null},mounted:function(){var t=this;$.getJSON("./assets/dialog.json",function(n){t.dialogs=n,t.nextTopics=t.dialogs.fromUser,t.appendDialog("0000")})},methods:{appendDialog:function(n){var o=this;if("object"===(void 0===n?"undefined":_typeof(n))&&n.length>0)n.forEach(function(t){return o.appendDialog(t)});else{if(null!=n){this.isTyping=!0;var i=this.getDialog(n);return e(i.details).forEach(function(n){o.msgChain=o.msgChain.then(function(){return r(700)}).then(function(){return o.sendMsg(n,t)})}),i.nextAuthor?this.appendDialog(i.nextAuthor):this.msgChain.then(function(){o.lastDialog=i,o.isTyping=!1})}this.lastDialog.responses=null}},sendMsg:function(t,n){switch(n){case"me":return this.sendUserMsg(t);default:return this.sendFriendMsg(t,n)}},sendFriendMsg:function(t,n){var s=this,a=e(t),u=a.replace(/<[^>]+>/g,"").length,l=/<img[^>]+>/.test(a),h=u>2||l,c={author:n,content:h?'\n        <div class="dot"></div>\n        <div class="dot"></div>\n        <div class="dot"></div>\n    ':a,isImg:l};return this.messages.push(c),h?(this.markMsgSize(c),setTimeout(i),r(Math.min(100*u,2e3)).then(function(){return s.markMsgSize(c,a)}).then(function(){return r(150)}).then(function(){c.content=a,o()})):(o(),Promise.resolve())},sendUserMsg:function(t){return this.messages.push({author:n,content:t}),o(),Promise.resolve()},markMsgSize:function(t){var n=this,e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null;return this.latestMsgContent=e||t.content,r(0).then(function(){return t.isImg&&s($("#mock-msg img"))}).then(function(){var e;Object.assign(t,{width:(e=$("#mock-msg")).width(),height:e.height()}),n.messages=[].concat(_toConsumableArray(n.messages))})},getDialog:function(t){var n=this.dialogs.fromMe.filter(function(n){return n.id===t});return n?n[0]:null},getDialogFromUser:function(t){var n=this.dialogs.fromUser.filter(function(n){return n.id===t});return n?n[0]:null},togglePrompt:function(t){this.isTyping||(this.hasPrompt=t)},respond:function(t){return this.say(t.content,t.nextAuthor)},ask:function(t){var n=e(t.details);return this.say(n,t.nextAuthor)},say:function(t,e){var o=this;return this.hasPrompt=!1,r(200).then(function(){return o.sendMsg(t,n)}).then(function(){return r(300)}).then(function(){return o.appendDialog(e)})}}});function e(t){return"string"!=typeof t&&t.length?t[Math.floor(Math.random()*t.length)]:t}function o(){setTimeout(function(){i();var t=$("#mobile-body-content .msg-row:last-child .msg");t.find("a").attr("target","_blank"),s(t).then(i)})}function i(){var t=$("#mobile-body-content"),n=t[0].scrollHeight-t.height()-t.scrollTop(),e=Date.now();requestAnimationFrame(function o(){var i=Math.min(1,(Date.now()-e)/250);t.scrollTop(t.scrollTop()+n*i),i<1&&requestAnimationFrame(o)})}function r(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0;return new Promise(function(n){setTimeout(n,t)})}function s(t){return new Promise(function(n){t.one("load",n).each(function(t,n){n.complete&&$(n).trigger("load")})})}}();
+            }
+        </script>
+    </body>
+</html>
